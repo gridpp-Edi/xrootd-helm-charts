@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Values.pfc.name }}
+  labels:
+    app: {{ .Values.pfc.app }}
+spec:
+  hostname: {{ .Values.pfc.hostname }}
+  nodeSelector:
+    nodename: {{ .Values.pfc.nodeSelector }}
+  hostAliases:
+    - ip: "192.168.122.5"
+      hostnames:
+        - "xrd1.edi.scotgrid.ac.uk"
+  containers:
+    - name: {{ .Values.pfc.containerName }}
+      image: {{ .Values.pfc.image }}
+      env:
+        - name: hostname
+          value: {{ .Values.pfc.env.hostname | quote }}
+        - name: ports
+          value: {{ .Values.pfc.env.ports | quote }}
+        - name: entrypoint
+          value: {{ .Values.pfc.env.entrypoint | quote }}
+        - name: XrdSecGSISRVNAMES
+          value: {{ .Values.pfc.env.XrdSecGSISRVNAMES | quote }}
+      ports:
+        - containerPort: {{ .Values.pfc.containerPort }}
+      volumeMounts:
+        - name: grid-security-volume
+          mountPath: /etc/grid-security
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
+          readOnly: false
+        - name: vomses-volume
+          mountPath: /etc/vomses
+          readOnly: true
+        - name: local-bin-volume
+          mountPath: /usr/local/bin
+          readOnly: true
+        - name: xrootd-config-volume
+          mountPath: /etc/xrootd
+          readOnly: true
+        - name: cache-volume
+          mountPath: /cache
+          readOnly: false
+        - name: entrypoint-volume
+          mountPath: /entrypoint
+          readOnly: true
+      command: ["/entrypoint/entrypoint2.sh"]
+  volumes:
+    - name: grid-security-volume
+      nfs:
+        server: {{ .Values.nfs.server }}
+        path: {{ .Values.nfs.paths.gridSecurity }}
+    - name: tmp-volume
+      nfs:
+        server: {{ .Values.nfs.server }}
+        path: {{ .Values.nfs.paths.tmp }}/xrd2
+    - name: vomses-volume
+      nfs:
+        server: {{ .Values.nfs.server }}
+        path: {{ .Values.nfs.paths.vomses }}
+    - name: local-bin-volume
+      nfs:
+        server: {{ .Values.nfs.server }}
+        path: {{ .Values.nfs.paths.localBin }}
+    - name: xrootd-config-volume
+      nfs:
+        server: {{ .Values.nfs.server }}
+        path: {{ .Values.nfs.paths.xrootdConfig }}
+    - name: cache-volume
+      nfs:
+        server: {{ .Values.nfs.server }}
+        path: {{ .Values.nfs.paths.cache }}
+    - name: entrypoint-volume
+      nfs:
+        server: {{ .Values.nfs.server }}
+        path: {{ .Values.nfs.paths.entrypoint }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.pfc.service.name }}
+spec:
+  type: NodePort
+  selector:
+    app: {{ .Values.pfc.app }}
+  ports:
+    - name: {{ .Values.pfc.service.portName }}
+      protocol: TCP
+      port: {{ .Values.pfc.service.port }}
+      targetPort: {{ .Values.pfc.service.targetPort }}
+      nodePort: {{ .Values.pfc.service.nodePort }}

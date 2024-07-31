@@ -1,0 +1,71 @@
+posix:
+  name: xrootd-posix
+  app: xrootd-posix
+  hostname: xrd1
+  nodeSelector: xrd1
+  containerName: xrootd-posix
+  image: gridppedi/xrdtesting:xrd-v5.6.5
+  containerPort: 1094
+  env:
+    hostname: "xrd1.edi.scotgrid.ac.uk"
+    ports: "1094"
+    entrypoint: "/entrypoint1.sh"
+    XrdSecGSISRVNAMES: "*.edi.scotgrid.ac.uk"
+  service:
+    name: xrootd-posix-service
+    portName: xrootd-posix-http
+    port: 1094
+    targetPort: 1094
+    nodePort: 30692
+
+posix2:
+  name: xrootd-posix2
+  app: xrootd-posix2
+  hostname: xrd3
+  nodeSelector: xrd3
+  containerName: xrootd-posix2
+  image: gridppedi/xrdtesting:xrd-v5.6.5
+  containerPort: 1094
+  env:
+    hostname: "xrd3.edi.scotgrid.ac.uk"
+    ports: "1094"
+    entrypoint: "/entrypoint3.sh"
+    XrdSecGSISRVNAMES: "*.edi.scotgrid.ac.uk"
+  service:
+    name: xrootd-posix2-service
+    portName: xrootd-posix2-http
+    port: 1094
+    targetPort: 1094
+    nodePort: 30694
+
+pfc:
+  name: xrootd-pfc
+  app: xrootd-pfc
+  hostname: xrd2
+  nodeSelector: xrd2
+  containerName: xrootd-pfc
+  image: gridppedi/xrdtesting:xrd-v5.6.5
+  containerPort: 1094
+  env:
+    hostname: "xrd2.edi.scotgrid.ac.uk"
+    ports: "1094"
+    entrypoint: "/entrypoint2.sh"
+    XrdSecGSISRVNAMES: "*.edi.scotgrid.ac.uk"
+  service:
+    name: xrootd-pfc-service
+    portName: xrootd-pfc-http
+    port: 1094
+    targetPort: 1094
+    nodePort: 30693
+
+nfs:
+  server: 192.168.122.1
+  paths:
+    gridSecurity: /opt/nfs-storage/hostData/xrd1/grid-security
+    vomses: /opt/nfs-storage/vomses
+    localBin: /opt/nfs-storage/local-bin
+    xrootdConfig: /opt/nfs-storage/xrootd-config
+    data: /opt/nfs-storage/data
+    entrypoint: /opt/nfs-storage/entrypoint
+    tmp: /opt/nfs-storage/tmp
+    cache: /opt/nfs-storage/cache
