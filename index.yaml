@@ -3,12 +3,12 @@ entries:
   xrootd:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2024-07-31T12:16:20.024338+01:00"
+    created: "2024-07-31T14:39:24.417219+01:00"
     description: A Helm chart for Kubernetes
     digest: e2d7af94008e704fd4a23385f585e102b7117f091f4480f4711bce7b5024c644
     name: xrootd
     type: application
     urls:
-    - https://github.com/gridpp-Edi/xrootd-helm-charts/xrootd-0.1.0.tgz
+    - https://gridpp-edi.github.io/xrootd-helm-charts/xrootd-0.1.0.tgz
     version: 0.1.0
-generated: "2024-07-31T12:16:20.023894+01:00"
+generated: "2024-07-31T14:39:24.415645+01:00"
